@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allofsports7 - Latest Sports News</title>
+<style>
+:root{--red:#e50914;--dark:#0d1b2a;--dark2:#1b263b;--bg:#f1f3f6;--text:#1a1a1a;--muted:#6b7280}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+body{background:var(--bg);color:var(--text);line-height:1.5}
+a{text-decoration:none;color:inherit}
+button,.btn{cursor:pointer;border:none;font-size:14px;border-radius:6px;padding:10px 16px;font-weight:600;display:inline-block}
+img{max-width:100%;display:block}
+.topbar{background:#000;color:#bbb;font-size:12px;padding:6px 0}
+.wrap{max-width:1200px;margin:0 auto;padding:0 15px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center}
+.topbar a:hover{color:#fff}
+header{background:var(--dark);position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 0}
+.logo{font-size:26px;font-weight:900;color:#fff;letter-spacing:-1px;white-space:nowrap}
+.logo span{color:var(--red)}
+.search{display:flex;flex:1;max-width:380px}
+.search input{flex:1;padding:10px 14px;border:none;border-radius:6px 0 0 6px;font-size:14px;outline:none;min-width:0}
+.search button{background:var(--red);color:#fff;border-radius:0 6px 6px 0}
+nav{background:var(--dark2)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto}
+nav a{color:#cfd8e3;padding:12px 16px;font-size:14px;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent}
+nav a:hover,nav a.active{color:#fff;border-bottom-color:var(--red);background:rgba(255,255,255,.05)}
+.ticker{background:#fff;border-bottom:1px solid #e3e6ea;overflow:hidden}
+.ticker .wrap{display:flex;align-items:center}
+.ticker .label{background:var(--red);color:#fff;font-weight:700;font-size:12px;padding:8px 14px;white-space:nowrap;z-index:2}
+.ticker .track{overflow:hidden;flex:1;position:relative;height:34px}
+.ticker .move{position:absolute;white-space:nowrap;display:flex;gap:50px;align-items:center;height:34px;animation:scroll 40s linear infinite}
+.ticker .move:hover{animation-play-state:paused}
+.ticker .move a{font-size:13px;font-weight:500}
+.ticker .move a:hover{color:var(--red)}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero{position:relative;height:430px;border-radius:12px;overflow:hidden;margin:20px 0;background:var(--dark)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;pointer-events:none}
+.slide.on{opacity:1;pointer-events:auto}
+.slide .bg,.slide .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slide .ph{font-size:140px}
+.slide .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.1) 65%)}
+.slide .cap{position:absolute;left:0;right:0;bottom:0;padding:30px 35px 45px;color:#fff}
+.slide h2{font-size:32px;line-height:1.2;margin:10px 0;max-width:800px}
+.slide p{color:#ddd;max-width:700px;font-size:15px}
+.tag{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;padding:4px 10px;border-radius:4px;letter-spacing:.5px}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;font-size:22px;width:42px;height:42px;border-radius:50%;padding:0;z-index:5}
+.arrow:hover{background:var(--red)}
+.prev{left:15px}.next{right:15px}
+.dots{position:absolute;bottom:15px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:5}
+.dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer}
+.dots i.on{background:var(--red);width:26px;border-radius:6px}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:25px;margin-bottom:40px}
+.sec-title{font-size:20px;font-weight:800;margin-bottom:15px;padding-left:12px;border-left:5px solid var(--red);text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.25s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.thumb{position:relative;height:190px;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:.4s}
+.card:hover .thumb img{transform:scale(1.07)}
+.thumb .tag{position:absolute;top:10px;left:10px;z-index:2}
+.ph{display:flex;align-items:center;justify-content:center;font-size:70px;width:100%;height:100%}
+.ph-football{background:linear-gradient(135deg,#0f9b0f,#004d00)}
+.ph-cricket{background:linear-gradient(135deg,#1e66f5,#0a2a6e)}
+.ph-f1{background:linear-gradient(135deg,#e50914,#4a0004)}
+.ph-basketball{background:linear-gradient(135deg,#ff8a00,#8a3d00)}
+.ph-tennis{background:linear-gradient(135deg,#c6d300,#5c6300)}
+.ph-chess{background:linear-gradient(135deg,#444,#000)}
+.card .body{padding:14px;flex:1;display:flex;flex-direction:column}
+.card h3{font-size:17px;line-height:1.3;margin-bottom:8px}
+.card:hover h3{color:var(--red)}
+.card p{font-size:13.5px;color:var(--muted);flex:1}
+.meta{font-size:12px;color:var(--muted);margin-top:10px;display:flex;gap:12px}
+.side .box{background:#fff;border-radius:10px;padding:18px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.trend{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #eee;align-items:flex-start}
+.trend:last-child{border:none}
+.trend .num{font-size:26px;font-weight:900;color:var(--red);min-width:30px}
+.trend h4{font-size:14px;line-height:1.35}
+.trend:hover h4{color:var(--red)}
+.trend small{color:var(--muted);font-size:12px}
+.catlist a{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-weight:600;font-size:14px}
+.catlist a:last-child{border:none}
+.catlist a:hover{color:var(--red)}
+.catlist b{background:var(--dark);color:#fff;border-radius:20px;padding:0 10px;font-size:12px;line-height:22px}
+.article{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.article .cover{height:420px}
+.article .cover img{width:100%;height:100%;object-fit:cover}
+.article .in{padding:28px}
+.article h1{font-size:32px;line-height:1.25;margin:12px 0}
+.article .content p{margin-bottom:16px;font-size:17px;line-height:1.75;color:#333}
+.crumb{font-size:13px;color:var(--muted);margin-bottom:15px}
+.crumb a:hover{color:var(--red)}
+.share{margin-top:20px;padding-top:15px;border-top:1px solid #eee;display:flex;gap:10px;flex-wrap:wrap}
+.share button{background:var(--dark);color:#fff}
+.empty{background:#fff;padding:50px 20px;text-align:center;border-radius:10px;color:var(--muted)}
+.panel{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:20px}
+.loginbox{max-width:400px;margin:50px auto}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 5px}
+input[type=text],input[type=password],select,textarea{width:100%;padding:11px;border:1px solid #d0d5dc;border-radius:6px;font-size:14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--red)}
+.b-red{background:var(--red);color:#fff}
+.b-dark{background:var(--dark);color:#fff}
+.b-gray{background:#e5e7eb;color:#222}
+.b-blue{background:#2563eb;color:#fff}
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.tabs button{background:#e5e7eb}
+.tabs button.on{background:var(--red);color:#fff}
+.preview{margin-top:10px;max-height:220px;border-radius:8px;display:none}
+.row{display:flex;gap:12px;align-items:center}
+.alist{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}
+.alist .t{width:90px;height:60px;border-radius:6px;overflow:hidden;flex-shrink:0}
+.alist .t img{width:100%;height:100%;object-fit:cover}
+.alist .t .ph{font-size:28px}
+.alist .info{flex:1;min-width:0}
+.alist .info h4{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alist .info small{color:var(--muted)}
+.alist button{padding:7px 12px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--dark);color:#fff;border-radius:10px;padding:16px}
+.stat b{font-size:26px;display:block}
+.err{color:var(--red);font-size:13px;margin-top:8px}
+footer{background:var(--dark);color:#aab4c2;padding:35px 0 15px;margin-top:20px}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:25px}
+footer h4{color:#fff;margin-bottom:12px}
+footer a{display:block;padding:3px 0;font-size:14px}
+footer a:hover{color:#fff}
+.copy{text-align:center;border-top:1px solid #243447;margin-top:25px;padding-top:15px;font-size:13px}
+#toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;transition:.3s;z-index:999}
+#toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){
+.layout{grid-template-columns:1fr}.hero{height:320px}.slide h2{font-size:22px}.slide p{display:none}
+.slide .ph{font-size:90px}.fgrid{grid-template-columns:1fr}.article .cover{height:240px}.article h1{font-size:24px}}
+@media(max-width:600px){
+.grid{grid-template-columns:1fr}.head{flex-wrap:wrap}.search{order:3;max-width:100%;flex-basis:100%}
+.logo{font-size:22px}.slide .cap{padding:20px 18px 40px}.arrow{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><span id="today"></span><a href="#/admin">Admin Panel</a></div></div>
+<header>
+  <div class="wrap head">
+    <a href="#/" class="logo">ALLOF<span>SPORTS</span>7</a>
+    <form class="search" onsubmit="doSearch(event)">
+      <input type="text" id="q" placeholder="Search sports news...">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+  <nav><div class="wrap" id="nav"></div></nav>
+</header>
+<div class="ticker"><div class="wrap"><div class="label">🔴 LATEST</div><div class="track"><div class="move" id="tickerMove"></div></div></div></div>
+<main class="wrap" id="app"></main>
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div><div class="logo" style="margin-bottom:10px">ALLOF<span>SPORTS</span>7</div>
+      <p style="font-size:14px">Your home for the latest football, cricket, F1, basketball, tennis and chess news from around the world.</p></div>
+      <div><h4>Sports</h4><div id="fcats"></div></div>
+      <div><h4>Quick Links</h4><a href="#/">Home</a><a href="#/admin">Admin Login</a></div>
+    </div>
+    <div class="copy">© <span id="yr"></span> Allofsports7. All rights reserved.</div>
+  </div>
+</footer>
+<div id="toast"></div>
+
+<script>
+/* ===== Safe storage helpers (never crash if storage is blocked) ===== */
+const store={
+  get(k){try{return localStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+};
+const sess={
+  get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}},
+  del(k){try{sessionStorage.removeItem(k)}catch(e){}}
+};
+
+/* ===== Config ===== */
+const CATS=[
+  {id:"football",name:"Football",icon:"⚽"},
+  {id:"cricket",name:"Cricket",icon:"🏏"},
+  {id:"f1",name:"F1",icon:"🏎️"},
+  {id:"basketball",name:"Basketball",icon:"🏀"},
+  {id:"tennis",name:"Tennis",icon:"🎾"},
+  {id:"chess",name:"Chess",icon:"♟️"}
+];
+const ADMIN_USER="admin";
+/* Simple string hash so the password is not stored as plain text.
+   NOTE: this is NOT real security. Real login needs a server. */
+function hash(s){
+  let h1=0xdeadbeef,h2=0x41c6ce57;
+  for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+  h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);
+}
+const DEFAULT_HASH=hash("admin123");
+const getHash=()=>store.get("aos7_passh")||DEFAULT_HASH;
+
+function seed(){
+  const d=h=>new Date(Date.now()-h*3600000).toISOString();
+  return [
+   {id:1,title:"Title Race Heats Up as Top Clubs Fight for the Crown",category:"football",featured:true,views:152,date:d(2),image:"",content:"The football season has reached a thrilling stage as the top clubs battle for the championship.\n\nFans across the world are glued to their screens as every match could decide the final standings.\n\nManagers have praised their squads for showing great character in recent weeks."},
+   {id:2,title:"Batters Dominate as Cricket Series Reaches a Thrilling Finish",category:"cricket",featured:true,views:128,date:d(5),image:"",content:"An exciting cricket series is heading towards a nail-biting finale after outstanding batting displays.\n\nThe bowlers will need to step up in the final match if they want to keep their hopes alive.\n\nThe decider is expected to attract a record crowd."},
+   {id:3,title:"Formula 1: Teams Bring Major Upgrades for the Next Grand Prix",category:"f1",featured:true,views:110,date:d(8),image:"",content:"Formula 1 teams are preparing big aerodynamic upgrades ahead of the next race weekend.\n\nEngineers believe the changes could shift the balance of power on the grid.\n\nDrivers will test the new parts during the first practice session."},
+   {id:4,title:"Basketball Playoffs: Underdogs Stun the Favorites in Overtime",category:"basketball",featured:true,views:97,date:d(12),image:"",content:"In a night full of drama, the underdogs pulled off a stunning overtime win in the playoffs.\n\nA last-second shot sealed the victory and sent the home crowd into a frenzy.\n\nThe series is now level heading into the next game."},
+   {id:5,title:"Tennis Star Storms into the Final with Dominant Display",category:"tennis",featured:true,views:84,date:d(20),image:"",content:"A commanding performance on court has sent the tennis star into the final.\n\nPowerful serving and sharp returns left the opponent with no answers.\n\nThe final promises to be a classic showdown."},
+   {id:6,title:"Chess Grandmasters Battle in Intense Championship Round",category:"chess",featured:false,views:60,date:d(26),image:"",content:"The world's best chess players faced off in a tense round filled with brilliant tactics.\n\nSeveral games ended in dramatic fashion, shaking up the leaderboard.\n\nOrganizers say interest in the event has reached a new high."},
+   {id:7,title:"Young Striker Signs New Long-Term Deal with His Club",category:"football",featured:false,views:73,date:d(30),image:"",content:"The talented young striker has committed his future to the club with a new long-term contract.\n\nThe club hailed the signing as a statement of ambition."},
+   {id:8,title:"Spinners Take Charge on a Turning Pitch in Test Cricket",category:"cricket",featured:false,views:49,date:d(40),image:"",content:"Spin bowlers made the most of a dry pitch to put their side in command.\n\nThe batting side now faces a huge challenge to save the match."}
+  ];
+}
+let news=null;
+try{news=JSON.parse(store.get("aos7_news")||"null")}catch(e){news=null}
+if(!Array.isArray(news)){news=seed();persist(true)}
+function persist(silent){
+  if(store.set("aos7_news",JSON.stringify(news)))return true;
+  if(!silent)toast("Storage full! Use a smaller image or delete old news.");
+  return false;
+}
+
+/* ===== Helpers ===== */
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const cat=id=>CATS.find(c=>c.id===id)||CATS[0];
+const sorted=()=>[...news].sort((a,b)=>new Date(b.date)-new Date(a.date));
+function ago(iso){
+  const s=(Date.now()-new Date(iso))/1000;
+  if(isNaN(s))return"";
+  if(s<60)return"Just now";
+  if(s<3600)return Math.floor(s/60)+" min ago";
+  if(s<86400)return Math.floor(s/3600)+" hours ago";
+  if(s<604800)return Math.floor(s/86400)+" days ago";
+  return new Date(iso).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+}
+let toastTimer=null;
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2600)}
+function media(n){
+  return n.image?`<img src="${esc(n.image)}" alt="${esc(n.title)}">`:`<div class="ph ph-${esc(n.category)}">${cat(n.category).icon}</div>`;
+}
+function excerpt(t,l=110){t=String(t).replace(/\n+/g," ");return t.length>l?t.slice(0,l).trim()+"...":t}
+function cardHTML(n){
+  return `<a class="card" href="#/article/${n.id}">
+    <div class="thumb"><span class="tag">${cat(n.category).name}</span>${media(n)}</div>
+    <div class="body"><h3>${esc(n.title)}</h3><p>${esc(excerpt(n.content))}</p>
+    <div class="meta"><span>🕒 ${ago(n.date)}</span><span>👁 ${n.views||0}</span></div></div></a>`;
+}
+function sidebar(){
+  const top=[...news].sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,5);
+  return `<aside class="side">
+    <div class="box"><div class="sec-title">Most Read</div>
+    ${top.map((n,i)=>`<a class="trend" href="#/article/${n.id}"><div class="num">${i+1}</div><div><h4>${esc(n.title)}</h4><small>${cat(n.category).name} • ${n.views||0} views</small></div></a>`).join("")}</div>
+    <div class="box"><div class="sec-title">Sports</div><div class="catlist">
+    ${CATS.map(c=>`<a href="#/category/${c.id}"><span>${c.icon} ${c.name}</span><b>${news.filter(n=>n.category===c.id).length}</b></a>`).join("")}</div></div></aside>`;
+}
+
+/* ===== Static parts ===== */
+$("today").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+$("yr").textContent=new Date().getFullYear();
+$("fcats").innerHTML=CATS.map(c=>`<a href="#/category/${c.id}">${c.icon} ${c.name}</a>`).join("");
+function buildNav(active){
+  $("nav").innerHTML=`<a href="#/" class="${active==="home"?"active":""}">Home</a>`+
+    CATS.map(c=>`<a href="#/category/${c.id}" class="${active===c.id?"active":""}">${c.icon} ${c.name}</a>`).join("");
+}
+function buildTicker(){
+  const items=sorted().slice(0,8).map(n=>`<a href="#/article/${n.id}">▪ ${esc(n.title)}</a>`).join("");
+  $("tickerMove").innerHTML=items+items;
+}
+function doSearch(e){
+  e.preventDefault();
+  const q=$("q").value.trim();
+  if(q)location.hash="#/search/"+encodeURIComponent(q);
+}
+
+/* ===== Slider ===== */
+let sliderTimer=null,cur=0;
+function initSlider(){
+  clearInterval(sliderTimer);
+  const slides=document.querySelectorAll(".slide"),dots=document.querySelectorAll(".dots i");
+  if(!slides.length)return;
+  const go=i=>{
+    cur=(i+slides.length)%slides.length;
+    slides.forEach((s,k)=>s.classList.toggle("on",k===cur));
+    dots.forEach((d,k)=>d.classList.toggle("on",k===cur));
+  };
+  dots.forEach((d,k)=>d.onclick=()=>go(k));
+  const p=document.querySelector(".prev"),n=document.querySelector(".next");
+  if(p)p.onclick=()=>go(cur-1);
+  if(n)n.onclick=()=>go(cur+1);
+  go(0);
+  if(slides.length>1)sliderTimer=setInterval(()=>go(cur+1),5000);
+}
+
+/* ===== Pages ===== */
+const app=$("app");
+
+function pageHome(){
+  buildNav("home");
+  $("q").value="";
+  const all=sorted();
+  let banner=all.filter(n=>n.featured).slice(0,5);
+  if(!banner.length)banner=all.slice(0,5);
+  const hero=banner.length?`<div class="hero">
+    ${banner.map(n=>`<a class="slide" href="#/article/${n.id}">
+      ${n.image?`<img class="bg" src="${esc(n.image)}" alt="">`:`<div class="ph ph-${esc(n.category)}">${cat(n.category).icon}</div>`}
+      <div class="shade"></div>
+      <div class="cap"><span class="tag">${cat(n.category).name}</span><h2>${esc(n.title)}</h2><p>${esc(excerpt(n.content,150))}</p></div></a>`).join("")}
+    <button class="arrow prev" aria-label="Previous">‹</button><button class="arrow next" aria-label="Next">›</button>
+    <div class="dots">${banner.map(()=>"<i></i>").join("")}</div></div>`:"";
+  app.innerHTML=hero+`<div class="layout"><section>
+    <div class="sec-title">Latest News</div>
+    ${all.length?`<div class="grid">${all.map(cardHTML).join("")}</div>`:'<div class="empty">No news yet.</div>'}
+  </section>${sidebar()}</div>`;
+  initSlider();
+}
+
+function pageCategory(id){
+  const c=CATS.find(x=>x.id===id);
+  if(!c)return pageHome();
+  buildNav(id);$("q").value="";
+  const list=sorted().filter(n=>n.category===id);
+  app.innerHTML=`<div class="layout" style="margin-top:25px"><section>
+    <div class="sec-title">${c.icon} ${c.name} News</div>
+    ${list.length?`<div class="grid">${list.map(cardHTML).join("")}</div>`:`<div class="empty">No ${c.name} news available right now.</div>`}
+  </section>${sidebar()}</div>`;
+}
+
+function pageSearch(q){
+  buildNav("");
+  $("q").value=q;
+  const k=q.toLowerCase();
+  const list=sorted().filter(n=>(n.title+" "+n.content+" "+cat(n.category).name).toLowerCase().includes(k));
+  app.innerHTML=`<div class="layout" style="margin-top:25px"><section>
+    <div class="sec-title">Search results for "${esc(q)}" (${list.length})</div>
+    ${list.length?`<div class="grid">${list.map(cardHTML).join("")}</div>`:`<div class="empty">😕 No results found. Try different keywords.</div>`}
+  </section>${sidebar()}</div>`;
+}
+
+function pageArticle(id){
+  const n=news.find(x=>String(x.id)===String(id));
+  if(!n){app.innerHTML='<div class="empty" style="margin:40px 0">Article not found.</div>';return}
+  /* count a view only once per browser session per article */
+  const key="aos7_seen_"+n.id;
+  if(!sess.get(key)){n.views=(n.views||0)+1;sess.set(key,"1");persist(true)}
+  buildNav(n.category);$("q").value="";
+  const rel=sorted().filter(x=>x.category===n.category&&x.id!==n.id).slice(0,4);
+  app.innerHTML=`<div class="layout" style="margin-top:25px"><section>
+    <div class="crumb"><a href="#/">Home</a> › <a href="#/category/${n.category}">${cat(n.category).name}</a></div>
+    <article class="article">
+      <div class="cover">${media(n)}</div>
+      <div class="in">
+        <span class="tag">${cat(n.category).name}</span>
+        <h1>${esc(n.title)}</h1>
+        <div class="meta" style="margin:0 0 20px"><span>🕒 ${new Date(n.date).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})}</span><span>👁 ${n.views||0} views</span></div>
+        <div class="content">${String(n.content).split(/\n+/).map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+        <div class="share"><button onclick="copyLink()">🔗 Copy Link</button><button onclick="goBack()">← Back</button></div>
+      </div>
+    </article>
+    ${rel.length?`<div class="sec-title" style="margin-top:30px">Related News</div><div class="grid">${rel.map(cardHTML).join("")}</div>`:""}
+  </section>${sidebar()}</div>`;
+}
+function goBack(){history.length>1?history.back():location.hash="#/"}
+function copyLink(){
+  const url=location.href;
+  const fallback=()=>{
+    try{
+      const ta=document.createElement("textarea");ta.value=url;ta.style.position="fixed";ta.style.opacity="0";
+      document.body.appendChild(ta);ta.select();
+      const ok=document.execCommand("copy");document.body.removeChild(ta);
+      toast(ok?"Link copied!":"Could not copy. Copy it from the address bar.");
+    }catch(e){toast("Could not copy. Copy it from the address bar.")}
+  };
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(url).then(()=>toast("Link copied!")).catch(fallback);
+  else fallback();
+}
+
+/* ===== Admin ===== */
+const isAdmin=()=>sess.get("aos7_admin")===getHash();
+let tab="add",editId=null,imgData="";
+
+function pageAdmin(){
+  buildNav("");$("q").value="";
+  if(!isAdmin()){
+    app.innerHTML=`<div class="panel loginbox"><h2>🔐 Admin Login</h2>
+      <label>Username</label><input type="text" id="lu" placeholder="Username" autocomplete="username">
+      <label>Password</label><input type="password" id="lp" placeholder="Password" autocomplete="current-password">
+      <div class="err" id="lerr"></div><br>
+      <div class="row"><button class="b-red" onclick="adminLogin()">Login</button><a href="#/" class="btn b-gray">Back</a></div></div>`;
+    const go=e=>{if(e.key==="Enter")adminLogin()};
+    $("lp").addEventListener("keydown",go);$("lu").addEventListener("keydown",go);
+    return;
+  }
+  const views=news.reduce((s,n)=>s+(n.views||0),0);
+  app.innerHTML=`<div style="margin-top:25px">
+    <div class="row" style="justify-content:space-between;margin-bottom:15px"><h2>⚙️ Admin Dashboard</h2><button class="b-dark" onclick="adminLogout()">Logout</button></div>
+    <div class="stats">
+      <div class="stat"><b>${news.length}</b>Total News</div>
+      <div class="stat"><b>${news.filter(n=>n.featured).length}</b>In Banner</div>
+      <div class="stat"><b>${views}</b>Total Views</div>
+      <div class="stat"><b>${CATS.length}</b>Categories</div>
+    </div>
+    <div class="tabs">
+      <button class="${tab==="add"?"on":""}" onclick="setTab('add')">${editId?"✏️ Edit News":"➕ Add News"}</button>
+      <button class="${tab==="manage"?"on":""}" onclick="setTab('manage')">📋 Manage News</button>
+      <button class="${tab==="settings"?"on":""}" onclick="setTab('settings')">🔑 Settings</button>
+    </div>
+    <div id="tabBody"></div></div>`;
+  renderTab();
+}
+function setTab(t){tab=t;if(t!=="add"){editId=null;imgData=""}pageAdmin()}
+function adminLogin(){
+  if($("lu").value.trim()===ADMIN_USER&&hash($("lp").value)===getHash()){
+    sess.set("aos7_admin",getHash());pageAdmin();toast("Welcome back, Admin!");
+  }else $("lerr").textContent="Incorrect username or password.";
+}
+function adminLogout(){sess.del("aos7_admin");location.hash="#/";toast("Logged out")}
+
+function renderTab(){
+  const b=$("tabBody");
+  if(tab==="add"){
+    const n=editId?news.find(x=>x.id===editId):null;
+    b.innerHTML=`<div class="panel">
+      <label>News Title *</label><input type="text" id="f_title" placeholder="Enter headline" value="${n?esc(n.title):""}">
+      <label>Category *</label><select id="f_cat">${CATS.map(c=>`<option value="${c.id}" ${n&&n.category===c.id?"selected":""}>${c.icon} ${c.name}</option>`).join("")}</select>
+      <label>Photo (optional)</label><input type="file" id="f_img" accept="image/*" onchange="pickImage(this)">
+      <img id="f_prev" class="preview" alt="Preview">
+      <button class="b-gray" id="f_rm" style="display:none;margin-top:8px" onclick="removeImage()">Remove Photo</button>
+      <label>News Content *</label><textarea id="f_content" rows="9" placeholder="Write the full news here. Press Enter twice for a new paragraph.">${n?esc(n.content):""}</textarea>
+      <label style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="f_feat" ${n&&n.featured?"checked":""}> Show in homepage banner (Featured)</label>
+      <br><div class="row"><button class="b-red" onclick="saveNews()">${editId?"Update News":"Publish News"}</button>
+      ${editId?'<button class="b-gray" onclick="setTab(\'manage\')">Cancel</button>':""}</div></div>`;
+    if(n&&n.image&&!imgData)imgData=n.image;
+    showPrev();
+  }
+  if(tab==="manage"){
+    const list=sorted();
+    b.innerHTML=`<div class="panel">${list.length?list.map(n=>`<div class="alist">
+      <div class="t">${media(n)}</div>
+      <div class="info"><h4>${esc(n.title)}</h4><small>${cat(n.category).name} • ${ago(n.date)} • 👁 ${n.views||0} ${n.featured?"• ⭐ Banner":""}</small></div>
+      <button class="b-blue" onclick="editNews(${n.id})">Edit</button>
+      <button class="b-red" onclick="delNews(${n.id})">Delete</button></div>`).join(""):'<div class="empty">No news yet.</div>'}</div>`;
+  }
+  if(tab==="settings"){
+    b.innerHTML=`<div class="panel" style="max-width:420px"><h3>Change Password</h3>
+      <label>Current Password</label><input type="password" id="s_old" autocomplete="current-password">
+      <label>New Password (min 4 characters)</label><input type="password" id="s_new" autocomplete="new-password">
+      <br><button class="b-red" onclick="changePass()">Update Password</button><hr style="margin:20px 0;border:none;border-top:1px solid #eee">
+      <button class="b-gray" onclick="resetDemo()">Reset to Demo News</button></div>`;
+  }
+}
+function showPrev(){
+  const p=$("f_prev"),r=$("f_rm");if(!p)return;
+  if(imgData){p.src=imgData;p.style.display="block";r.style.display="inline-block"}
+  else{p.style.display="none";r.style.display="none"}
+}
+function removeImage(){imgData="";$("f_img").value="";showPrev()}
+function pickImage(inp){
+  const f=inp.files[0];if(!f)return;
+  if(!f.type.startsWith("image/")){toast("Please choose an image file");inp.value="";return}
+  const rd=new FileReader();
+  rd.onerror=()=>toast("Could not read the file");
+  rd.onload=e=>{
+    const im=new Image();
+    im.onerror=()=>toast("This image could not be loaded");
+    im.onload=()=>{
+      const max=800,sc=Math.min(1,max/im.width);
+      const c=document.createElement("canvas");
+      c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+      c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      imgData=c.toDataURL("image/jpeg",0.6);
+      showPrev();toast("Photo attached ✔");
+    };
+    im.src=e.target.result;
+  };
+  rd.readAsDataURL(f);
+}
+function saveNews(){
+  const title=$("f_title").value.trim(),content=$("f_content").value.trim();
+  if(!title||!content){toast("Please fill title and content");return}
+  const data={title,content,category:$("f_cat").value,featured:$("f_feat").checked,image:imgData};
+  const backup=JSON.stringify(news);
+  if(editId){
+    const n=news.find(x=>x.id===editId);if(n)Object.assign(n,data);
+  }else{
+    news.unshift({id:Date.now(),views:0,date:new Date().toISOString(),...data});
+  }
+  if(!persist()){news=JSON.parse(backup);return}
+  toast(editId?"News updated!":"News published!");
+  editId=null;imgData="";tab="manage";buildTicker();pageAdmin();
+}
+function editNews(id){editId=id;imgData="";tab="add";pageAdmin();window.scrollTo(0,0)}
+function delNews(id){
+  if(!confirm("Delete this news permanently?"))return;
+  news=news.filter(n=>n.id!==id);persist();buildTicker();toast("News deleted");pageAdmin();
+}
+function changePass(){
+  if(hash($("s_old").value)!==getHash()){toast("Current password is wrong");return}
+  const np=$("s_new").value;
+  if(np.length<4){toast("New password is too short");return}
+  const h=hash(np);
+  if(!store.set("aos7_passh",h)){toast("Could not save password");return}
+  sess.set("aos7_admin",h);
+  toast("Password updated!");$("s_old").value="";$("s_new").value="";
+}
+function resetDemo(){
+  if(!confirm("This will replace all news with demo news. Continue?"))return;
+  news=seed();persist();buildTicker();toast("Demo news restored");pageAdmin();
+}
+
+/* ===== Router ===== */
+function safeDecode(s){try{return decodeURIComponent(s)}catch(e){return s}}
+function route(){
+  clearInterval(sliderTimer);
+  const parts=(location.hash||"#/").slice(2).split("/");
+  const r=parts[0],p=safeDecode(parts.slice(1).join("/")||"");
+  buildTicker();
+  if(r==="category")pageCategory(p);
+  else if(r==="article")pageArticle(p);
+  else if(r==="search")pageSearch(p);
+  else if(r==="admin")pageAdmin();
+  else pageHome();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+route();
+</script>
+</body>
+</html>
